@@ -6,13 +6,13 @@
   </head>
   <body>
     <div class="echo-container delay">
-        <iframe id="mainframe" src="https://blog.fefe.de" frameborder="0" allowfullscreen></iframe>
+        <iframe id="mainframe" src="https://leserecho.de/" frameborder="0" allowfullscreen></iframe>
     </div>
     <script>
       // set iframe content to url
       window.onload = (event) => {
         var frameElement = document.getElementById("mainframe");
-        frameElement.src = "https://blog.fefe.de" + window.location.pathname;
+        frameElement.src = "https://leserecho.de" + window.location.pathname;
       };
 
       // function to fix width of iframe
