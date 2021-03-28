@@ -5,14 +5,20 @@
       <link rel="stylesheet" href="/style.css">
   </head>
   <body>
-    <div class="echo-container delay">
-        <iframe id="mainframe" src="https://leserecho.de/" frameborder="0" allowfullscreen></iframe>
+    <!-- <div class="container" style="display: none;">
+      <img src="/LE.png" alt="LeserEcho Logo" >
+    </div> -->
+    <div class="echo-container">
+        <iframe id="mainframe" src="" frameborder="0" allowfullscreen></iframe>
     </div>
     <script>
+      $(".echo-container").css("animation-play-state","paused");
+
       // set iframe content to url
       window.onload = (event) => {
         var frameElement = document.getElementById("mainframe");
         frameElement.src = "https://leserecho.de" + window.location.pathname;
+        // $(".echo-container").css("animation-play-state","running");
       };
 
       // function to fix width of iframe
@@ -37,12 +43,28 @@
       eventer(messageEvent, function (e) {
         console.log(firstLoad, document.title, e.data[0], e.data[1]);
         if( ( e.data[1] != lastPushed && !firstLoad ) || ( document.title == "" && e.data[0] != "/" ) ) {
-          document.title = e.data[1];
+          if(e.data[0] == "/") e.data[1] = "LeserEcho " + subdomainName + " - Alle Beiträge kostenlos lesen!";
+          document.title = e.data[1];;
           history.replaceState("", e.data[1], e.data[0]);
+          $(".echo-container").show();
+          $(".echo-container").css("animation-play-state","running");
+          $(".container").fadeOut();
           lastPushed = e.data[1];
           firstLoad = false;
         };
       });
+
+      function getSubdomain(hostname) {
+        var regexParse = new RegExp('[a-z\-0-9]{2,63}\.[a-z\.]{2,5}$');
+        var urlParts = regexParse.exec(hostname);
+        return hostname.replace(urlParts[0],'').slice(0, -1);
+      }
+      function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+      let subdomainName = capitalizeFirstLetter(getSubdomain(window.location.hostname));
+      if(window.location.pathname == "/") document.title = "LeserEcho " + subdomainName + " - Alle Beiträge kostenlos lesen!";
+
     </script>
   </body>
 </html>
