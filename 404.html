@@ -1,0 +1,48 @@
+<html>
+  <head>
+      <script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>
+      <link rel="shortcut icon" type="image/x-icon" href="/favicon.png">
+      <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <div class="echo-container delay">
+        <iframe id="mainframe" src="https://minotalen.digital/" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <script>
+      // set iframe content to url
+      window.onload = (event) => {
+        var frameElement = document.getElementById("mainframe");
+        frameElement.src = "https://minotalen.digital/" + window.location.pathname;
+      };
+
+      // function to fix width of iframe
+      var calcWidth = function() {
+        $('#mainframe').width($(window).width());
+      }
+      $(document).ready(function() {
+        calcWidth();
+      });
+      $(window).resize(function() {
+        calcWidth();
+      }).load(function() {
+        calcWidth();
+      });
+
+      // push to the history
+      var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+      var eventer = window[eventMethod];
+      var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+      let lastPushed = "/";
+      let firstLoad = true;
+      eventer(messageEvent, function (e) {
+        console.log(firstLoad, document.title, e.data[0], e.data[1]);
+        if( ( e.data[1] != lastPushed && !firstLoad ) || ( document.title == "" && e.data[0] != "/" ) ) {
+          document.title = e.data[1];
+          history.replaceState("", e.data[1], e.data[0]);
+          lastPushed = e.data[1];
+          firstLoad = false;
+        };
+      });
+    </script>
+  </body>
+</html>

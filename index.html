@@ -1,0 +1,53 @@
+<html>
+  <head>
+      <script type='text/javascript' src='//code.jquery.com/jquery-1.8.3.js'></script>
+      <link rel="shortcut icon" type="image/x-icon" href="/favicon.png">
+      <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="echo-container">
+        <iframe id="mainframe" src="https://minotalen.digital/" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <script>
+      // function to fix width of iframe
+      var calcWidth = function() {
+        console.log("resize",$(window).width());
+        $('#mainframe').width($(window).width());
+      }
+      $(document).ready(function() {
+        calcWidth();
+      });
+      $(window).resize(function() {
+        calcWidth();
+      }).load(function() {
+        calcWidth();
+      });
+
+      // push to the history
+      var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+      var eventer = window[eventMethod];
+      var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+      let lastPushed = "/";
+      let induced = false;
+      eventer(messageEvent, function (e) {
+        if( e.data[1] != lastPushed ) {
+          console.log(e.data, e.data[1], lastPushed);
+          induced = true;
+          document.title = e.data[1];
+          history.replaceState("", e.data[1], e.data[0]);
+          lastPushed = e.data[1];
+        };
+      });
+
+      function getSubdomain(hostname) {
+        var regexParse = new RegExp('[a-z\-0-9]{2,63}\.[a-z\.]{2,5}$');
+        var urlParts = regexParse.exec(hostname);
+        return hostname.replace(urlParts[0],'').slice(0, -1);
+      }
+      function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+      let subdomainName = capitalizeFirstLetter(getSubdomain(window.location.hostname));
+    </script>
+  </body>
+</html>
