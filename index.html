@@ -33,7 +33,7 @@
         if( e.data[1] != lastPushed ) {
           console.log(e.data, e.data[1], lastPushed);
           induced = true;
-          if(e.data[0] == "/") e.data[1] = "ytmous" + subdomainName + "The anonymous YouTube Proxy";
+          if(e.data[0] == "/") e.data[1] = "ytmous " + "- The anonymous YouTube Proxy";
           document.title = e.data[1];
           history.replaceState("", e.data[1], e.data[0]);
           lastPushed = e.data[1];
@@ -50,7 +50,7 @@
         return string.charAt(0).toUpperCase() + string.slice(1);
       }
       let subdomainName = capitalizeFirstLetter(getSubdomain(window.location.hostname));
-      if(window.location.pathname == "/") document.title = "ytmous" + subdomainName + "- The anonymous YouTube Proxy";
+      if(window.location.pathname == "/") document.title = "ytmous " + "- The anonymous YouTube Proxy";
 
     </script>
   </body>
